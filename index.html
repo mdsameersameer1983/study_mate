@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Mate</title>
+    <style>
+        :root {
+            --bg: #080b14;
+            --panel: rgba(18, 23, 38, 0.82);
+            --panel-2: rgba(255,255,255,0.06);
+            --text: #f8fafc;
+            --muted: #a7b0c3;
+            --accent: #7c5cff;
+            --accent-2: #20d6b5;
+            --border: rgba(255,255,255,0.10);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(124,92,255,.24), transparent 30%),
+                radial-gradient(circle at 85% 80%, rgba(32,214,181,.15), transparent 28%),
+                var(--bg);
+            display: grid;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .app {
+            width: min(920px, 100%);
+            height: min(760px, calc(100vh - 40px));
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            backdrop-filter: blur(22px);
+            box-shadow: 0 30px 100px rgba(0,0,0,.42);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            font-size: 22px;
+            box-shadow: 0 8px 25px rgba(124,92,255,.28);
+        }
+
+        .title {
+            flex: 1;
+        }
+
+        .title h1 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .title p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status {
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: #b7f7e9;
+            background: rgba(32,214,181,.08);
+            font-size: 12px;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            scroll-behavior: smooth;
+        }
+
+        .welcome {
+            max-width: 680px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        .welcome .emoji {
+            font-size: 52px;
+            margin-bottom: 10px;
+        }
+
+        .welcome h2 {
+            margin: 0 0 8px;
+            font-size: clamp(25px, 5vw, 38px);
+        }
+
+        .welcome p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .message {
+            max-width: 78%;
+            padding: 13px 16px;
+            margin: 0 0 15px;
+            border-radius: 18px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .bot {
+            margin-right: auto;
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+        }
+
+        .user {
+            margin-left: auto;
+            background: linear-gradient(135deg, #6f50ee, #4d7cff);
+            box-shadow: 0 10px 25px rgba(79,91,220,.20);
+        }
+
+        .composer {
+            display: flex;
+            gap: 10px;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            background: rgba(5,8,16,.45);
+        }
+
+        #messageInput {
+            flex: 1;
+            min-width: 0;
+            color: var(--text);
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            outline: none;
+            padding: 14px 16px;
+            font-size: 15px;
+        }
+
+        #messageInput::placeholder { color: #7e8799; }
+
+        #messageInput:focus {
+            border-color: rgba(124,92,255,.7);
+            box-shadow: 0 0 0 3px rgba(124,92,255,.10);
+        }
+
+        #sendButton {
+            border: 0;
+            border-radius: 15px;
+            padding: 0 21px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--accent), #4d7cff);
+        }
+
+        #sendButton:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 0; }
+
+            .app {
+                height: 100vh;
+                border: 0;
+                border-radius: 0;
+            }
+
+            .status { display: none; }
+
+            .message { max-width: 90%; }
+
+            #sendButton {
+                padding: 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="app">
+        <header class="topbar">
+            <div class="logo">✦</div>
+            <div class="title">
+                <h1>Study Mate</h1>
+                <p>Focused AI assistant</p>
+            </div>
+            <div class="status">● Online</div>
+        </header>
+
+        <section id="messages">
+            <div class="welcome" id="welcome">
+                <div class="emoji">✦</div>
+                <h2>Welcome to Study Mate</h2>
+                <p>Ask a question related to this chatbot's topic and get a focused AI answer.</p>
+            </div>
+        </section>
+
+        <form class="composer" id="chatForm">
+            <input
+                id="messageInput"
+                type="text"
+                autocomplete="off"
+                placeholder="Type your question..."
+                required
+            >
+            <button id="sendButton" type="submit">Send</button>
+        </form>
+    </main>
+
+    <script>
+        const form = document.getElementById("chatForm");
+        const input = document.getElementById("messageInput");
+        const messages = document.getElementById("messages");
+        const sendButton = document.getElementById("sendButton");
+        const welcome = document.getElementById("welcome");
+
+        function addMessage(text, type) {
+            if (welcome) welcome.remove();
+
+            const message = document.createElement("div");
+            message.className = `message ${type}`;
+            message.textContent = text;
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage(message, "user");
+            input.value = "";
+            sendButton.disabled = true;
+
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Something went wrong.");
+                }
+
+                addMessage(data.answer, "bot");
+            } catch (error) {
+                addMessage(
+                    error.message || "Something went wrong. Please try again.",
+                    "bot"
+                );
+            } finally {
+                sendButton.disabled = false;
+                input.focus();
+            }
+        });
+    </script>
+</body>
+</html>
